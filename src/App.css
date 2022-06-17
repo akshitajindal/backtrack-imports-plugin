@@ -1,0 +1,49 @@
+* {
+  margin:0px;
+  padding:0px;
+  box-sizing: border-box;
+}
+
+#root{
+  background-color: rgb(0, 0, 0);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.ListContainer {
+  width: 100%;
+  height: 40vh;
+  padding: 2rem;
+  /* background-color: rgb(228, 228, 228); */
+  background-color: rgb(40, 40, 40);
+  margin-bottom: 1rem;
+}
+
+.moduleGraphContainer {
+  display: grid;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.graphContainer {
+  width: 100%;
+}
+
+.graphContainerLabel {
+  color: white;
+  padding-bottom: 0.6rem;
+  width: 100%;
+  
+}
+
+.graphContainerLabel p {
+  font-size: 1.2rem;
+  overflow-wrap: break-word;
+}
+
+.graphContainerLabel code{
+  font-size: 1.1rem;
+  background-color: rgb(40, 40, 40);
+  padding: 2px 6px;
+  border-radius: 5px;
+}

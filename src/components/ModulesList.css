@@ -1,0 +1,52 @@
+.modulesListContainer {
+    width: 40vw;
+    height: 100%;
+    float: right;
+    display: flex;
+    flex-direction: column;
+}
+
+.modulesList{
+    flex-grow: 1; 
+    overflow-y: scroll;
+}
+
+.searchbox {
+    margin-bottom: 0.6rem;
+}
+.searchbox input {
+    width: 100%;
+    padding: 0.4rem;
+    font-size: 16px;
+    background-color: rgb(22, 22, 22);
+    color: white;
+    border-color: white;
+    border-radius: 4px;
+    border-width: 0.5px;
+}
+
+.searchbox input:focus {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+}
+
+.modulesList li {
+    list-style:none;
+    display: block;
+    padding: 0.2rem 0.4rem;
+    margin: 0 0.2rem;
+    border-radius: 0.2rem;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-wrap: break-word;
+    color: white;
+}
+.modulesList li:hover{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    overflow: visible; 
+    white-space: normal;
+    height:auto; 
+}
