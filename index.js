@@ -44,7 +44,8 @@ class BacktrackImportsPlugin {
 
     async buildAndRenderPlugin(relative_path, openHTMLFile) {
         let startTime = performance.now();
-        exec(`cd ${relative_path} && yarn build`, () => {
+        exec(`cd ${relative_path} && yarn build`, (err, stdout, stderr) => {
+            console.log(err, stdout, stderr);
             let endTime = performance.now();
             console.log(`Yarn build took ${(endTime - startTime)/1000} seconds`);
             const HTMLfilePath = __dirname + '/build/index.html';
