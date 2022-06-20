@@ -64,7 +64,7 @@ class StatsSerializeStream extends Readable {
       const entries = Object.entries(obj);
 
       for (const [itemKey, itemValue] of entries) {
-        if (itemValue === undefined) {
+        if (itemValue === undefined || (itemKey !== "chunks" && itemKey !== "modules" && itemKey !== "id" && itemKey !== "files" && itemKey !== "name" && itemKey !== "size" && itemKey !== "reasons" && itemKey !== "moduleName")) {
           continue;
         }
 

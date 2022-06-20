@@ -1,2 +1,5 @@
 node_modules
 build
+yarn.lock
+yarn-error.log
+src/lib/stats-backtrack-imports-code.json
