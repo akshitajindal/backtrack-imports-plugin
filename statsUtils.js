@@ -66,6 +66,8 @@ class StatsSerializeStream extends Readable {
       for (const [itemKey, itemValue] of entries) {
         if (itemValue === undefined || (itemKey !== "chunks" && itemKey !== "modules" && itemKey !== "id" && itemKey !== "files" && itemKey !== "name" && itemKey !== "size" && itemKey !== "reasons" && itemKey !== "moduleName")) {
           continue;
+        } else if (itemKey === 'modules' && this._indentLevel !== 1) {
+          continue;
         }
 
         yield `${isFirst ? '' : ','}\n${this._indent}${JSON.stringify(itemKey)}: `;
