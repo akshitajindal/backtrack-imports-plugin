@@ -13,6 +13,7 @@ class StatsSerializeStream extends Readable {
     super();
     this._indentLevel = 0;
     this._stringifier = this._stringify(stats);
+    this.requiredKeys = new Set(["chunks", "modules", "id", "files", "name", "size", "reasons", "moduleName"]);
   }
 
   get _indent() {
@@ -64,7 +65,9 @@ class StatsSerializeStream extends Readable {
       const entries = Object.entries(obj);
 
       for (const [itemKey, itemValue] of entries) {
-        if (itemValue === undefined || (itemKey !== "chunks" && itemKey !== "modules" && itemKey !== "id" && itemKey !== "files" && itemKey !== "name" && itemKey !== "size" && itemKey !== "reasons" && itemKey !== "moduleName")) {
+        if (itemValue === undefined) {
+          continue;
+        } else if (!this.requiredKeys.has(itemKey)) {
           continue;
         } else if (itemKey === 'modules' && this._indentLevel !== 1) {
           continue;
