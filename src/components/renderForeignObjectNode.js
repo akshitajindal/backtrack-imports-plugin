@@ -8,7 +8,7 @@ const renderForeignObjectNode = ({
 }) => (
   <react.Fragment>
     <g className="node_element_tree" onClick={toggleNode} onMouseOver={(event)=>{handleNodeMouseOver(event, nodeDatum)}} onMouseOut={()=>{handleNodeMouseOut(nodeDatum)}} >
-      <rect width="200" height="50" x="-100">
+      <rect width="220" height="50" x="-110">
       </rect>
       <text strokeWidth="0"  x="0" y="25" alignmentBaseline="middle"  textAnchor="middle">
         {(nodeDatum.name.length > 20) && nodeDatum.name.slice(0,10)+ "..." + nodeDatum.name.slice(-10)}

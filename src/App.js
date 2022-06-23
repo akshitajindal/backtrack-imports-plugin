@@ -54,7 +54,11 @@ function App() {
       let allPaths = graph.findAllPaths(active.module, active.chunks);
       //console.log(allPaths);
       console.timeEnd(graph.findAllPaths);
-      if(typeof(allPaths) === 'string') {
+      if(typeof(allPaths) === 'undefined'){
+        setCircularDependency(false);
+        setAllPathsTreeObj(null);
+      }
+      else if(typeof(allPaths) === 'string') {
         setCircularDependency(true);
         setAllPathsTreeObj({});
       } else {
@@ -74,7 +78,7 @@ function App() {
             </div>
             <div className='moduleGraphContainer'>
                 {
-                  Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
+                  allPathsTreeObj && Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
                     <div className='graphContainer'>
                       <div className='graphContainerLabel'>
                         <p>Backtrack imports from module : <code>{active.module}</code></p>
@@ -84,14 +88,20 @@ function App() {
                 } 
                 {  
                   circularDependency && 
-                  <div className='error-message'>
+                  <div className='Message error-message'>
                     <p>Encountered circular dependency in the backtrack path of the selected module.</p>
                   </div>
                 }
                 {
-                  Object.keys(allPathsTreeObj).length === 0 && !circularDependency &&
-                  <div className='message'>
+                  allPathsTreeObj && Object.keys(allPathsTreeObj).length === 0 && !circularDependency &&
+                  <div className='Message message'>
                     <p>Empty backtrack path of the selected module for the selected chunks.</p>
+                  </div>
+                }
+                {
+                  !allPathsTreeObj && !circularDependency &&
+                  <div className='Message empty-message'>
+                    <p>Module is not selected or Empty Chunk-List</p>
                   </div>
                 }
             </div>

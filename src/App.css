@@ -14,26 +14,25 @@
   width: 100%;
   height: 40vh;
   padding: 2rem;
-  /* background-color: rgb(228, 228, 228); */
   background-color: rgb(40, 40, 40);
   margin-bottom: 1rem;
 }
 
 .moduleGraphContainer {
+  /* width: inherit; */
   display: grid;
   gap: 1.5rem;
   justify-content: center;
 }
 
 .graphContainer {
-  width: 100%;
+  width: 85vw;
 }
 
 .graphContainerLabel {
   color: white;
   padding-bottom: 0.6rem;
   width: 100%;
-  
 }
 
 .graphContainerLabel p {
@@ -48,10 +47,29 @@
   border-radius: 5px;
 }
 
+.Message {
+  width: inherit;
+  border: 1px solid;
+  border-radius: 0.5rem;
+  padding: 2rem 3rem;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+}
+
 .error-message {
-  color: red;
+  background-color: rgb(255 0 0 / 13%);
+  color: rgb(186, 34, 34);
+  border-color: rgb(186, 34, 34);
 }
 
 .message {
+  background-color: rgba(245, 245, 220, 0.291);
   color: beige;
+  border-color: beige;
+}
+
+.empty-message {
+  background-color: rgba(255, 228, 196, 0.316);
+  color: bisque;
+  border-color: bisque;
 }
