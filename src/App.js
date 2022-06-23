@@ -3,11 +3,13 @@ import TreeComponent from './components/TreeComponent';
 import CheckboxChunks from './components/CheckboxChunks';
 import ModulesList from './components/ModulesList';
 import react, {useState,useEffect} from 'react';
-import {Graph} from './lib/backtrack-imports-code';
+import {Graph} from '../lib/backtrack-imports-code';
 const Fuse = require('fuse.js')
 
 const graph = new Graph();
+console.time(graph.setGraphObj);
 graph.setGraphObj();
+console.timeEnd(graph.setGraphObj);
 
 let allChunksArr = [];
 graph.allChunks.forEach((value, key) => {
@@ -45,19 +47,23 @@ function App() {
     }
 
     const [allPathsTreeObj, setAllPathsTreeObj] = useState({});
+    const [circularDependency, setCircularDependency] = useState(false);
 
     useEffect(()=>{
+      console.time(graph.findAllPaths);
       let allPaths = graph.findAllPaths(active.module, active.chunks);
-      // if(!allPaths || allPaths.length===0){
-      //   setAllPathsTreeObj({});
-      // } else {
+      //console.log(allPaths);
+      console.timeEnd(graph.findAllPaths);
+      if(typeof(allPaths) === 'string') {
+        setCircularDependency(true);
+        setAllPathsTreeObj({});
+      } else {
+        setCircularDependency(false);
+        console.time(graph.generateAllPathsTreeObj);
         let updatedAllPathsTreeObj = graph.generateAllPathsTreeObj(allPaths);
+        console.timeEnd(graph.generateAllPathsTreeObj);
         setAllPathsTreeObj(updatedAllPathsTreeObj);
-        //console.log(updatedAllPathsTreeObj);
-        // allPaths.forEach(path => {
-        //   console.log(path);
-        // })
-      //}
+      }
     },[active])
 
     return (
@@ -68,7 +74,7 @@ function App() {
             </div>
             <div className='moduleGraphContainer'>
                 {
-                  Object.keys(allPathsTreeObj).length !== 0 && 
+                  Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
                     <div className='graphContainer'>
                       <div className='graphContainerLabel'>
                         <p>Backtrack imports from module : <code>{active.module}</code></p>
@@ -76,21 +82,18 @@ function App() {
                       <TreeComponent data = {allPathsTreeObj} />
                     </div>
                 } 
-                {/* {Object.keys(roots[0]).length !== 0 && <TreeComponent data = {roots[0]} />}       */}
-                {/* {
-                  Object.keys(roots).length > 0 && roots.map((root) => {
-                    if(Object.keys(root).length !== 0)
-                      return (
-                        <div className='graphContainer'>
-                          <div className='graphContainerLabel'>
-                            <p>Forward Imports From Root Module : <code>{root.name}</code></p>
-                          </div>
-                          <TreeComponent data = {root} />
-                        </div>
-                      )
-                    else
-                      return null;
-                })}                  */}
+                {  
+                  circularDependency && 
+                  <div className='error-message'>
+                    <p>Encountered circular dependency in the backtrack path of the selected module.</p>
+                  </div>
+                }
+                {
+                  Object.keys(allPathsTreeObj).length === 0 && !circularDependency &&
+                  <div className='message'>
+                    <p>Empty backtrack path of the selected module for the selected chunks.</p>
+                  </div>
+                }
             </div>
         </react.Fragment>
     );

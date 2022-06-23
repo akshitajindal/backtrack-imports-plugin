@@ -60,7 +60,7 @@ class BacktrackImportsPlugin {
     }
 
     async generateStatsFile(stats) {
-        const statsFileFolder = __dirname + '/src/lib';
+        const statsFileFolder = __dirname + '/lib';
         const statsFilename = 'stats-backtrack-imports.json'
         const statsFilepath = path.resolve(statsFileFolder, statsFilename);
         await fs.promises.mkdir(path.dirname(statsFilepath), {
