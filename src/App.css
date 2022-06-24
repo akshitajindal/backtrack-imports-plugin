@@ -19,7 +19,6 @@
 }
 
 .moduleGraphContainer {
-  /* width: inherit; */
   display: grid;
   gap: 1.5rem;
   justify-content: center;
@@ -72,4 +71,10 @@
   background-color: rgba(255, 228, 196, 0.316);
   color: bisque;
   border-color: bisque;
+}
+
+.loading-message {
+  background-color: rgba(15, 124, 15, 0.225);
+  color: white;
+  border-color: seagreen;
 }

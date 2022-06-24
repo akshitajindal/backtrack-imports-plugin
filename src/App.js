@@ -2,14 +2,14 @@ import './App.css';
 import TreeComponent from './components/TreeComponent';
 import CheckboxChunks from './components/CheckboxChunks';
 import ModulesList from './components/ModulesList';
-import react, {useState,useEffect} from 'react';
+import react, {useState, useEffect} from 'react';
 import {Graph} from '../lib/backtrack-imports-code';
+import WorkerBuilder from "./worker/worker-builder";
+import TreeObjWorker from "./worker/treeObj.worker";
 const Fuse = require('fuse.js')
 
 const graph = new Graph();
-console.time(graph.setGraphObj);
 graph.setGraphObj();
-console.timeEnd(graph.setGraphObj);
 
 let allChunksArr = [];
 graph.allChunks.forEach((value, key) => {
@@ -22,7 +22,11 @@ const fuse = new Fuse(graph.allNodes, {
     keys: ['label']
 })
 
+const workerInstance = new WorkerBuilder(TreeObjWorker);
+
 function App() {
+
+    //const workerInstance = new WorkerBuilder(TreeObjWorker);
 
     const [active, setActive] = useState({
         module : "",
@@ -48,27 +52,39 @@ function App() {
 
     const [allPathsTreeObj, setAllPathsTreeObj] = useState({});
     const [circularDependency, setCircularDependency] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    workerInstance.onmessage = (message) => {
+      if (message) {
+        //console.log("Message from worker", message.data);
+        setAllPathsTreeObj(message.data);
+        setIsLoading(false);
+      }
+      //workerInstance.terminate();
+    };
 
     useEffect(()=>{
-      console.time(graph.findAllPaths);
-      let allPaths = graph.findAllPaths(active.module, active.chunks);
-      //console.log(allPaths);
-      console.timeEnd(graph.findAllPaths);
-      if(typeof(allPaths) === 'undefined'){
-        setCircularDependency(false);
-        setAllPathsTreeObj(null);
+      const setGraphObj = async () => {
+        let allPaths = graph.findAllPaths(active.module, active.chunks);
+        if(typeof(allPaths) === 'undefined'){
+          setCircularDependency(false);
+          setAllPathsTreeObj(null);
+        }
+        else if(typeof(allPaths) === 'string') {
+          setCircularDependency(true);
+          setAllPathsTreeObj({});
+        } else {
+          setIsLoading(true);
+          setCircularDependency(false);
+          workerInstance.postMessage([allPaths]);
+          // let updatedAllPathsTreeObj = graph.generateAllPathsTreeObj(allPaths);
+          // setAllPathsTreeObj(updatedAllPathsTreeObj);
+        }
       }
-      else if(typeof(allPaths) === 'string') {
-        setCircularDependency(true);
-        setAllPathsTreeObj({});
-      } else {
-        setCircularDependency(false);
-        console.time(graph.generateAllPathsTreeObj);
-        let updatedAllPathsTreeObj = graph.generateAllPathsTreeObj(allPaths);
-        console.timeEnd(graph.generateAllPathsTreeObj);
-        setAllPathsTreeObj(updatedAllPathsTreeObj);
-      }
+      setGraphObj();
     },[active])
+
 
     return (
         <react.Fragment>
@@ -78,7 +94,13 @@ function App() {
             </div>
             <div className='moduleGraphContainer'>
                 {
-                  allPathsTreeObj && Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
+                  isLoading &&
+                  <div className='Message loading-message'>
+                    <p>Loading...</p>
+                  </div>
+                }
+                {
+                  !isLoading && allPathsTreeObj && Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
                     <div className='graphContainer'>
                       <div className='graphContainerLabel'>
                         <p>Backtrack imports from module : <code>{active.module}</code></p>
@@ -87,19 +109,19 @@ function App() {
                     </div>
                 } 
                 {  
-                  circularDependency && 
+                  !isLoading && circularDependency && 
                   <div className='Message error-message'>
                     <p>Encountered circular dependency in the backtrack path of the selected module.</p>
                   </div>
                 }
                 {
-                  allPathsTreeObj && Object.keys(allPathsTreeObj).length === 0 && !circularDependency &&
+                  !isLoading && allPathsTreeObj && Object.keys(allPathsTreeObj).length === 0 && !circularDependency &&
                   <div className='Message message'>
                     <p>Empty backtrack path of the selected module for the selected chunks.</p>
                   </div>
                 }
                 {
-                  !allPathsTreeObj && !circularDependency &&
+                  !isLoading && !allPathsTreeObj && !circularDependency &&
                   <div className='Message empty-message'>
                     <p>Module is not selected or Empty Chunk-List</p>
                   </div>
