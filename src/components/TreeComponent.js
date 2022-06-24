@@ -1,39 +1,28 @@
 import './TreeComponent.css';
 import React from 'react';
 import Tree from 'react-d3-tree';
-import renderForeignObjectNode from './renderForeignObjectNode';
+import RenderForeignObjectNode from './RenderForeignObjectNode';
 import { useCenteredTree } from "./helpers";
 
 
 function TreeComponent (props) {
 
-    // const nodeSize = { x: 200, y: 200 };
-    // const foreignObjectProps = { width: nodeSize.x, height: nodeSize.y, x: 20 };
     const [dimensions, translate, containerRef] = useCenteredTree();
 
     function handleNodeMouseOver(event, nodeData) {
-        // console.log("here");
-        // let tooltip = document.createElement("div");
-        // tooltip.className = "tooltip";
-        // let svgElement = document.querySelector(".rd3t-svg");
-        // let gElement = document.querySelector(".rd3t-g");
-        // tooltip.setAttribute("id", nodeData.id);
-        // let tooltip = document.getElementById(nodeData.id);
-        // let tooltip = document.querySelector(".tooltip");
-        // tooltip.innerHTML = nodeData.name;
-        // tooltip.style.display = "block";
-        // tooltip.style.left = event.pageX + 10 + 'px';
-        // tooltip.style.top = event.pageY + 10 + 'px';
-        // svgElement.append(tooltip);
-        // gElement.append(tooltip);
+        let tooltip = document.querySelector(".tooltip");
+        let nodeTitle = document.querySelector(".nodeTitle");
+        let nodeSize = document.querySelector(".nodeSize");
+        nodeTitle.innerHTML = "Title: " + nodeData.name;
+        nodeSize.innerHTML = "Size: " + nodeData.size + " Bytes";
+        tooltip.style.display = "block";
+        tooltip.style.left = event.clientX + 10 + 'px';
+        tooltip.style.top = event.clientY + 20 + 'px';
     }
     
-    function handleNodeMouseOut(nodeData) {
-        // console.log("out");
-        // let tooltip = document.querySelector(".tooltip");
-        // let tooltip = document.getElementById(nodeData.id);
-        // tooltip.innerHTML = "";
-        // tooltip.style.display = "none";
+    function handleNodeMouseOut() {
+        let tooltip = document.querySelector(".tooltip");
+        tooltip.style.display = "none";
     }
 
     return (
@@ -43,12 +32,8 @@ function TreeComponent (props) {
                 orientation={"vertical"}
                 translate={translate}
                 dimensions={dimensions}
-                //allowForeignObjects
-                // nodeLabelComponent={
-                //     NodeCard()
-                // }
                 renderCustomNodeElement={(rd3tProps) =>
-                    renderForeignObjectNode({ ...rd3tProps, handleNodeMouseOver, handleNodeMouseOut})
+                    <RenderForeignObjectNode nodeData={rd3tProps.nodeDatum} toggleNode={rd3tProps.toggleNode} handleNodeMouseOver={handleNodeMouseOver} handleNodeMouseOut={handleNodeMouseOut}/>
                 }
                 rootNodeClassName="node__root"
                 branchNodeClassName="node__branch"
@@ -61,6 +46,10 @@ function TreeComponent (props) {
                     y: 200
                 }}
             />
+            <div className='tooltip'>
+                <div className='nodeTitle'></div>
+                <div className='nodeSize'></div>
+            </div>
         </div>
     )
 

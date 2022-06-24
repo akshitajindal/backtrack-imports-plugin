@@ -38,15 +38,16 @@ g .rd3t-node:hover {
     fill:rgb(203, 203, 203);
 }
 
-/* .node_element_tree title{
-    font-size:12px;
-} */
-
-
-/* .tooltip {
-    position: absolute;
-    background: cornsilk;
+.tooltip {
+    display: none;
+    position: fixed;
+    background: rgba(37, 35, 35);
     border: 1px solid black;
-    border-radius: 5px;
+    border-radius: 2px;
     padding: 5px;
-} */
+    z-index: 1000;
+    max-width: 250px;
+    overflow-wrap: break-word;
+    font-size: 10px;
+    color: white;
+}
