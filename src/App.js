@@ -59,8 +59,8 @@ function App() {
       if (message) {
         //console.log("Message from worker", message.data);
         setAllPathsTreeObj(message.data);
-        setIsLoading(false);
       }
+      setIsLoading(false);
       //workerInstance.terminate();
     };
 
@@ -103,7 +103,7 @@ function App() {
                   !isLoading && allPathsTreeObj && Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
                     <div className='graphContainer'>
                       <div className='graphContainerLabel'>
-                        <p>Backtrack imports from module : <code>{active.module}</code></p>
+                        <p>Backtrack imports from module : <code>{allPathsTreeObj.name}</code></p>
                       </div>
                       <TreeComponent data = {allPathsTreeObj} />
                     </div>

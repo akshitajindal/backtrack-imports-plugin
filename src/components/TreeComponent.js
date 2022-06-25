@@ -17,7 +17,7 @@ function TreeComponent (props) {
         nodeSize.innerHTML = "Size: " + nodeData.size + " Bytes";
         tooltip.style.display = "block";
         tooltip.style.left = event.clientX + 10 + 'px';
-        tooltip.style.top = event.clientY + 20 + 'px';
+        tooltip.style.top = event.clientY + 10 + 'px';
     }
     
     function handleNodeMouseOut() {
