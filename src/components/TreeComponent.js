@@ -25,6 +25,10 @@ function TreeComponent (props) {
         tooltip.style.display = "none";
     }
 
+    function handleNodeOnClick(nodeData) {
+        props.handleNodeOnClick(nodeData);
+    }
+
     return (
         <div className="treeWrapper" style={{ width: '85vw', height: '70vh' }} ref={containerRef}>
             <Tree 
@@ -33,13 +37,12 @@ function TreeComponent (props) {
                 translate={translate}
                 dimensions={dimensions}
                 renderCustomNodeElement={(rd3tProps) =>
-                    <RenderForeignObjectNode nodeData={rd3tProps.nodeDatum} toggleNode={rd3tProps.toggleNode} handleNodeMouseOver={handleNodeMouseOver} handleNodeMouseOut={handleNodeMouseOut}/>
+                    <RenderForeignObjectNode nodeData={rd3tProps.nodeDatum} toggleNode={rd3tProps.toggleNode} handleNodeOnClick={handleNodeOnClick} handleNodeMouseOver={handleNodeMouseOver} handleNodeMouseOut={handleNodeMouseOut}/>
                 }
                 rootNodeClassName="node__root"
                 branchNodeClassName="node__branch"
                 leafNodeClassName="node__leaf"
                 pathFunc="step"
-                initialDepth={1}
                 collapsible={true}
                 nodeSize={{
                     x: 240,

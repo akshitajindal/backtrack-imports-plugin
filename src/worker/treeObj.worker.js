@@ -40,8 +40,7 @@ export default () => {
             } else {
                 if(!tempArrOfObj[arrMap[element.parentId]].children)
                     tempArrOfObj[arrMap[element.parentId]].children = [];
-                if(tempArrOfObj[arrMap[element.parentId]].children)
-                    tempArrOfObj[arrMap[element.parentId]].children.push(element);
+                tempArrOfObj[arrMap[element.parentId]].children.push(element);
             }
         })
         postMessage(roots[0]);
