@@ -18,9 +18,9 @@ class BacktrackImportsPlugin {
 
     apply(compiler) {
         this.compiler = compiler;
-        if(compiler.options.name==='client'){
+        if (compiler.options.name === 'client') {
             compiler.hooks.done.tapAsync(pluginName, (stats, callback) => {
-                callback = callback || (() => {});
+                callback = callback || (() => { });
                 const relative_path = __dirname.replace(process.cwd(), '.');
                 const actions = [];
                 // actions.push(() => this.generateStatsFile(stats.toJson()));
@@ -30,14 +30,14 @@ class BacktrackImportsPlugin {
 
                 if (actions.length) {
                     setImmediate(async () => {
-                      try {
-                        //await Promise.all(actions.map(action => action()));
-                        await this.generateStatsFile(stats.toJson());
-                        await this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile);
-                        callback();
-                      } catch (e) {
-                        callback(e);
-                      }
+                        try {
+                            //await Promise.all(actions.map(action => action()));
+                            await this.generateStatsFile(stats.toJson());
+                            await this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile);
+                            callback();
+                        } catch (e) {
+                            callback(e);
+                        }
                     });
                 } else {
                     callback();
@@ -51,10 +51,10 @@ class BacktrackImportsPlugin {
         exec(`cd ${relative_path} && yarn build`, (err, stdout, stderr) => {
             console.log(err, stdout, stderr);
             let endTime = performance.now();
-            console.log(`Yarn build took ${(endTime - startTime)/1000} seconds`);
+            console.log(`Yarn build took ${(endTime - startTime) / 1000} seconds`);
             const HTMLfilePath = __dirname + '/build/index.html';
             console.log(`${bold('Backtrack Imports Plugin')} saved HTML file to ${bold(HTMLfilePath)}`);
-            if(openHTMLFile)
+            if (openHTMLFile)
                 open(HTMLfilePath);
         });
     }
@@ -64,14 +64,14 @@ class BacktrackImportsPlugin {
         const statsFilename = 'stats-backtrack-imports.json'
         const statsFilepath = path.resolve(statsFileFolder, statsFilename);
         await fs.promises.mkdir(path.dirname(statsFilepath), {
-          recursive: true
+            recursive: true
         });
-    
+
         try {
-          await writeStats(stats, statsFilepath);
-          console.log(`${bold('Backtrack Imports Plugin')} saved stats file to ${bold(statsFilepath)}`);
+            await writeStats(stats, statsFilepath);
+            console.log(`${bold('Backtrack Imports Plugin')} saved stats file to ${bold(statsFilepath)}`);
         } catch (error) {
-          console.log(`${('Backtrack Imports Plugin')} error saving stats file to ${bold(statsFilepath)}: ${error}`);
+            console.log(`${('Backtrack Imports Plugin')} error saving stats file to ${bold(statsFilepath)}: ${error}`);
         }
     }
 }

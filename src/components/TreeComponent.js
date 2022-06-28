@@ -5,7 +5,7 @@ import RenderForeignObjectNode from './RenderForeignObjectNode';
 import { useCenteredTree } from "./helpers";
 
 
-function TreeComponent (props) {
+function TreeComponent(props) {
 
     const [dimensions, translate, containerRef] = useCenteredTree();
 
@@ -19,7 +19,7 @@ function TreeComponent (props) {
         tooltip.style.left = event.clientX + 10 + 'px';
         tooltip.style.top = event.clientY + 10 + 'px';
     }
-    
+
     function handleNodeMouseOut() {
         let tooltip = document.querySelector(".tooltip");
         tooltip.style.display = "none";
@@ -31,13 +31,13 @@ function TreeComponent (props) {
 
     return (
         <div className="treeWrapper" style={{ width: '85vw', height: '70vh' }} ref={containerRef}>
-            <Tree 
+            <Tree
                 data={props.data}
                 orientation={"vertical"}
                 translate={translate}
                 dimensions={dimensions}
                 renderCustomNodeElement={(rd3tProps) =>
-                    <RenderForeignObjectNode nodeData={rd3tProps.nodeDatum} toggleNode={rd3tProps.toggleNode} handleNodeOnClick={handleNodeOnClick} handleNodeMouseOver={handleNodeMouseOver} handleNodeMouseOut={handleNodeMouseOut}/>
+                    <RenderForeignObjectNode nodeData={rd3tProps.nodeDatum} toggleNode={rd3tProps.toggleNode} handleNodeOnClick={handleNodeOnClick} handleNodeMouseOver={handleNodeMouseOver} handleNodeMouseOut={handleNodeMouseOut} />
                 }
                 rootNodeClassName="node__root"
                 branchNodeClassName="node__branch"
