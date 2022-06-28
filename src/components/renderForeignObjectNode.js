@@ -8,7 +8,7 @@ function RenderForeignObjectNode (props) {
       if(currWidth>maxWidth){
           text = text.split("");
           let len = text.length;
-          if(len%2==0){
+          if(len%2===0){
               text.splice(len/2-1, 2, '...');
           } else {
               text.splice(Math.floor(len/2), 1, '...');
@@ -30,7 +30,6 @@ function RenderForeignObjectNode (props) {
 
   const setTextElem = function () {
     let nodeElem = document.querySelector('.nodeRect');
-    console.log("here");
     if(nodeElem) {
       let widthAvailable = nodeElem.getBoundingClientRect().width - 10;
       let textElem = document.getElementById(props.nodeData.id);
