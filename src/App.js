@@ -1,7 +1,7 @@
 import './App.css';
-import TreeComponent from './components/TreeComponent';
 import CheckboxChunks from './components/CheckboxChunks';
 import ModulesList from './components/ModulesList';
+import GraphContainer from './components/GraphContainer';
 import react, {useState, useEffect} from 'react';
 import {Graph} from '../lib/backtrack-imports-code';
 // import WorkerBuilder from "./worker/worker-builder";
@@ -104,39 +104,7 @@ function App() {
                 <ModulesList allNodes={graph.allNodes} fuse={fuse} handleModulesChange={handleModulesChange}/>
             </div>
             <div className='moduleGraphContainer'>
-                {
-                  isLoading &&
-                  <div className='Message loading-message'>
-                    <p>Loading...</p>
-                  </div>
-                }
-                {
-                  !isLoading && allPathsTreeObj && Object.keys(allPathsTreeObj).length !== 0 && !circularDependency &&
-                    <div className='graphContainer'>
-                      <div className='graphContainerLabel'>
-                        <p>Backtrack imports from module : <code>{allPathsTreeObj.name}</code></p>
-                      </div>
-                      <TreeComponent data = {allPathsTreeObj} handleNodeOnClick = {handleNodeOnClick} />
-                    </div>
-                } 
-                {  
-                  !isLoading && circularDependency && 
-                  <div className='Message error-message'>
-                    <p>Encountered circular dependency in the backtrack path of the selected module.</p>
-                  </div>
-                }
-                {
-                  !isLoading && allPathsTreeObj && Object.keys(allPathsTreeObj).length === 0 && !circularDependency &&
-                  <div className='Message message'>
-                    <p>Empty backtrack path of the selected module for the selected chunks.</p>
-                  </div>
-                }
-                {
-                  !isLoading && !allPathsTreeObj && !circularDependency &&
-                  <div className='Message empty-message'>
-                    <p>Module is not selected or Empty Chunk-List</p>
-                  </div>
-                }
+                <GraphContainer isLoading={isLoading} allPathsTreeObj={allPathsTreeObj} circularDependency={circularDependency} handleNodeOnClick={handleNodeOnClick}/>
             </div>
         </react.Fragment>
     );

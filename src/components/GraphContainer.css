@@ -1,0 +1,54 @@
+.graphContainer {
+    width: 85vw;
+}
+  
+.graphContainerLabel {
+    color: white;
+    padding-bottom: 0.6rem;
+    width: 100%;
+}
+  
+.graphContainerLabel p {
+    font-size: 1.2rem;
+    overflow-wrap: break-word;
+}
+  
+.graphContainerLabel code{
+    font-size: 1.1rem;
+    background-color: rgb(40, 40, 40);
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+  
+.Message {
+    width: inherit;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    padding: 2rem 3rem;
+    margin-top: 2rem;
+    font-size: 1.2rem;
+}
+  
+.error-message {
+    background-color: rgb(255 0 0 / 13%);
+    color: rgb(186, 34, 34);
+    border-color: rgb(186, 34, 34);
+}
+  
+.message {
+    background-color: rgba(245, 245, 220, 0.291);
+    color: beige;
+    border-color: beige;
+}
+  
+.empty-message {
+    background-color: rgba(255, 228, 196, 0.316);
+    color: bisque;
+    border-color: bisque;
+}
+  
+.loading-message {
+    background-color: rgba(15, 124, 15, 0.225);
+    color: white;
+    border-color: seagreen;
+}
