@@ -94,6 +94,7 @@ function App() {
         }
       }
       setGraphObj();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[active])
 
 
