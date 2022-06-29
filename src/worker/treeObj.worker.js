@@ -1,14 +1,16 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
-    const makeid = (length) => {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
+    const makeid = (length = 16) => {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
         for (var i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-        return result;
+        let now = Date.now();
+        return (now + result);
     }
+
     // eslint-disable-next-line no-restricted-globals
     self.onmessage = (message) => {
         let filePath = message.data[0];
@@ -27,7 +29,7 @@ export default () => {
                 return [];
             }
             tempArrOfObj = [];
-            let rootId = makeid(16);
+            let rootId = makeid();
             if (!parent_id) {
                 parent_id = rootId;
             }
@@ -39,7 +41,7 @@ export default () => {
                 let path = allPaths[i][depth + 1];
                 if (!setOfObj.has(path.name)) {
                     setOfObj.add(path.name);
-                    let currElemId = makeid(16);
+                    let currElemId = makeid();
                     let element = { id: currElemId, parentId: parent_id, name: path.name, size: path.size };
                     tempArrOfObj.push(element);
                 }
