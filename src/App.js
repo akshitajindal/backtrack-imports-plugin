@@ -34,6 +34,7 @@ function App() {
     })
     const [allPathsTreeObj, setAllPathsTreeObj] = useState({});
     const [circularDependency, setCircularDependency] = useState(false);
+    const [circularDependencyArr, setCircularDependencyArr] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [allPathsArrOfObj, setAllPathsArrOfObj] = useState([]);
 
@@ -76,14 +77,17 @@ function App() {
                 setCircularDependency(false);
                 setAllPathsTreeObj(null);
                 setAllPathsArrOfObj(null);
+                setCircularDependencyArr(null);
             }
-            else if (typeof (allPaths) === 'string') {
+            else if (allPaths.msg) {
                 setCircularDependency(true);
+                setCircularDependencyArr(allPaths.arr);
                 setAllPathsTreeObj({});
                 setAllPathsArrOfObj([]);
             } else {
                 //setIsLoading(true);
                 setCircularDependency(false);
+                setCircularDependencyArr([]);
                 //workerInstance.postMessage([allPaths]);
                 let updatedAllPathsArrOfObj = graph.generateAllPathsTreeObj(active.module, null, 0, allPathsArrOfObj);
                 setAllPathsArrOfObj(updatedAllPathsArrOfObj);
@@ -105,7 +109,7 @@ function App() {
                 <ModulesList allNodes={graph.allNodes} fuse={fuse} handleModulesChange={handleModulesChange} />
             </div>
             <div className='moduleGraphContainer'>
-                <GraphContainer isLoading={isLoading} allPathsTreeObj={allPathsTreeObj} circularDependency={circularDependency} handleNodeOnClick={handleNodeOnClick} />
+                <GraphContainer isLoading={isLoading} allPathsTreeObj={allPathsTreeObj} circularDependency={circularDependency} circularDependencyArr={circularDependencyArr} handleNodeOnClick={handleNodeOnClick} />
             </div>
         </react.Fragment>
     );

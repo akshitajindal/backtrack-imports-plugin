@@ -2,7 +2,7 @@ const exec = require('child_process').exec;
 const open = require('opn');
 const fs = require('fs');
 const path = require('path');
-const { writeStats } = require('./statsUtils');
+const { writeStats } = require('./lib/statsUtils');
 const { bold } = require('chalk');
 
 const pluginName = 'BacktrackImportsPlugin'
@@ -51,7 +51,7 @@ class BacktrackImportsPlugin {
         exec(`cd ${relative_path} && yarn build`, (err, stdout, stderr) => {
             console.log(err, stdout, stderr);
             let endTime = performance.now();
-            console.log(`Yarn build took ${(endTime - startTime) / 1000} seconds`);
+            console.log(`Backtrack imports plugin build took ${(endTime - startTime) / 1000} seconds`);
             const HTMLfilePath = __dirname + '/build/index.html';
             console.log(`${bold('Backtrack Imports Plugin')} saved HTML file to ${bold(HTMLfilePath)}`);
             if (openHTMLFile)
