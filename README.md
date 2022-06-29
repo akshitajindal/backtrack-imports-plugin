@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+[![node][node]][node-url]
+[![npm][npm]][npm-url]
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+  <a href="https://github.com/webpack/webpack">
+    <img width="200" height="200"
+      src="https://webpack.js.org/assets/icon-square-big.svg">
+  </a>
+  <h1>Backtrack Imports Plugin</h1>
+  <p>Visualize the import paths of any module in accordance with  selected chunks using an interactive tree.</p>
+</div>
 
-## Available Scripts
+<h2 align="center">Install</h2>
 
-In the project directory, you can run:
+```bash
+# NPM
+npm install backtrack-imports-plugin
 
-### `yarn start`
+# Yarn
+yarn add backtrack-imports-plugin
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<h2 align="center">Usage (as a plugin)</h2>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```js
+// webpack.config.js
+const { BacktrackImportsPlugin } = require("backtrack-imports-plugin");
+module.exports = {
+    plugins: [new BacktrackImportsPlugin()],
+};
 
-### `yarn test`
+// next.config.js
+module.exports = (nextConfig = {}) =>
+    Object.assign({}, nextConfig, {
+        webpack(config, options) {
+            const BacktrackImportsPlugin =
+                require("backtrack-imports-plugin").BacktrackImportsPlugin;
+            config.plugins.push(new BacktrackImportsPlugin({}));
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+            return config;
+        },
+    });
+```
 
-### `yarn build`
+### Backtrack-Imports-Plugin creates an interactive tree visualization of the imports path for the selected module.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![GIF of Backtrack-Imports-Plugin](./public/93f72404-b338-11e6-92d4-9a365550a701.gif)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### This module will help you:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Realize the imports structure between various files.
+2. Get the size of each file through the interactive tree.
+3. Find the undesirable imports.
+4. Check if there is a circular dependency in the import paths of any module.
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[node]: https://img.shields.io/badge/node-%3E%3D%20v14.17.0-blue
+[node-url]: https://npmjs.com/package/webpack-bundle-analyzer
+[npm]: https://img.shields.io/badge/npm-%3E%3D%20v6.14.13-orange
+[npm-url]: https://npmjs.com/package/webpack-bundle-analyzer
