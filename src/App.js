@@ -30,8 +30,6 @@ function App() {
         module: "",
         chunks: allChunksArr,
     })
-    const [allPathsTreeObj, setAllPathsTreeObj] = useState({});
-    const [circularDependency, setCircularDependency] = useState(false);
     const [circularDependencyArr, setCircularDependencyArr] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [allPathsArrOfObj, setAllPathsArrOfObj] = useState([]);
@@ -52,7 +50,7 @@ function App() {
 
     const handleNodeOnClick = function (nodeData) {
         if (!nodeData.children) {
-            workerInstance.postMessage([nodeData.name, allPaths, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj]);
+            workerInstance.postMessage([nodeData.name, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj, allPaths]);
         }
     }
 
@@ -60,16 +58,6 @@ function App() {
         if (message) {
             let updatedAllPathsArrOfObj = message.data[0];
             setAllPathsArrOfObj(updatedAllPathsArrOfObj);
-            let depth = message.data[1];
-            if (depth === 0) {
-                if (updatedAllPathsArrOfObj.length > 0)
-                    setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
-                else
-                    setAllPathsTreeObj({});
-            } else {
-                if (updatedAllPathsArrOfObj.length > 0)
-                    setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
-            }
         }
         setIsLoading(false);
     };
@@ -78,24 +66,19 @@ function App() {
         const setGraphObj = async () => {
             let updatedAllPaths = graph.findAllPaths(active.module, active.chunks);
             if (typeof (updatedAllPaths) === 'undefined') {
-                setCircularDependency(false);
-                setAllPathsTreeObj(null);
                 setAllPathsArrOfObj(null);
-                setCircularDependencyArr(null);
+                setCircularDependencyArr([]);
                 setAllPaths([]);
             }
             else if (updatedAllPaths.msg) {
-                setCircularDependency(true);
                 setCircularDependencyArr(updatedAllPaths.arr);
-                setAllPathsTreeObj({});
                 setAllPathsArrOfObj([]);
                 setAllPaths([]);
             } else {
                 setIsLoading(true);
                 setAllPaths(updatedAllPaths);
-                setCircularDependency(false);
                 setCircularDependencyArr([]);
-                workerInstance.postMessage([active.module, updatedAllPaths, null, 0, allPathsArrOfObj]);
+                workerInstance.postMessage([active.module, null, 0, allPathsArrOfObj, updatedAllPaths]);
             }
         }
         setGraphObj();
@@ -110,7 +93,7 @@ function App() {
                 <ModulesList allNodes={graph.allNodes} fuse={fuse} handleModulesChange={handleModulesChange} />
             </div>
             <div className='moduleGraphContainer'>
-                <GraphContainer isLoading={isLoading} allPathsTreeObj={allPathsTreeObj} circularDependency={circularDependency} circularDependencyArr={circularDependencyArr} handleNodeOnClick={handleNodeOnClick} />
+                <GraphContainer isLoading={isLoading} allPathsArrOfObj={allPathsArrOfObj} circularDependencyArr={circularDependencyArr} handleNodeOnClick={handleNodeOnClick} />
             </div>
         </react.Fragment>
     );

@@ -9,11 +9,7 @@ function CheckboxChunks(props) {
         new Array(props.allChunksArr.length).fill(true)
     );
 
-    const handleAllChecksOnChange = () => {
-        const updatedAllCheckState = !allChecks;
-        const updatedCheckedState = Array(props.allChunksArr.length).fill(updatedAllCheckState);
-        setAllChecks(updatedAllCheckState);
-        setCheckedState(updatedCheckedState);
+    const setNewActiveChunkList = (updatedCheckedState) => {
         let activeChunksList = [];
         updatedCheckedState.forEach((state, index) => {
             if (state)
@@ -22,18 +18,21 @@ function CheckboxChunks(props) {
         props.handleChunksChange(activeChunksList);
     }
 
+    const handleAllChecksOnChange = () => {
+        const updatedAllCheckState = !allChecks;
+        const updatedCheckedState = Array(props.allChunksArr.length).fill(updatedAllCheckState);
+        setAllChecks(updatedAllCheckState);
+        setCheckedState(updatedCheckedState);
+        setNewActiveChunkList(updatedCheckedState);
+    }
+
     const handleOnChange = (position) => {
         const updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
         );
         updatedCheckedState.includes(false) ? setAllChecks(false) : setAllChecks(true);
         setCheckedState(updatedCheckedState);
-        let activeChunksList = [];
-        updatedCheckedState.forEach((state, index) => {
-            if (state)
-                activeChunksList.push(props.allChunksArr[index]);
-        })
-        props.handleChunksChange(activeChunksList);
+        setNewActiveChunkList(updatedCheckedState);
     };
 
     return (

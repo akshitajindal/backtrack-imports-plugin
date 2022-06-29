@@ -47,13 +47,16 @@ class BacktrackImportsPlugin {
     async buildAndRenderPlugin(relative_path, openHTMLFile) {
         let startTime = performance.now();
         exec(`cd ${relative_path} && yarn build`, (err, stdout, stderr) => {
-            console.log(err, stdout, stderr);
-            let endTime = performance.now();
-            console.log(`Backtrack imports plugin build took ${(endTime - startTime) / 1000} seconds`);
-            const HTMLfilePath = __dirname + '/build/index.html';
-            console.log(`${bold('Backtrack Imports Plugin')} saved HTML file to ${bold(HTMLfilePath)}`);
-            if (openHTMLFile)
-                open(HTMLfilePath);
+            if (err)
+                console.log(err);
+            else {
+                let endTime = performance.now();
+                console.log(`Backtrack imports plugin build took ${(endTime - startTime) / 1000} seconds`);
+                const HTMLfilePath = __dirname + '/build/index.html';
+                console.log(`${bold('Backtrack Imports Plugin')} saved HTML file to ${bold(HTMLfilePath)}`);
+                if (openHTMLFile)
+                    open(HTMLfilePath);
+            }
         });
     }
 

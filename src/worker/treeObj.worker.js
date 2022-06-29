@@ -14,12 +14,12 @@ export default () => {
     // eslint-disable-next-line no-restricted-globals
     self.onmessage = (message) => {
         let filePath = message.data[0];
-        let allPaths = message.data[1];
-        let parent_id = message.data[2];
-        let depth = message.data[3];
-        let allPathsArrOfObj = message.data[4];
+        let parent_id = message.data[1];
+        let depth = message.data[2];
+        let allPathsArrOfObj = message.data[3];
+        let allPaths = message.data[4];
         let tempArrOfObj = generateAllPathsTreeObj(filePath, allPaths, parent_id, depth, allPathsArrOfObj);
-        postMessage([tempArrOfObj, depth]);
+        postMessage([tempArrOfObj]);
     };
 
     const generateAllPathsTreeObj = function (filePath, allPaths, parent_id, depth, allPathsArrOfObj) {
