@@ -95,7 +95,7 @@ function App() {
             }
             else if (updatedAllPaths.msg) {
                 setCircularDependency(true);
-                setCircularDependencyArr(allPaths.arr);
+                setCircularDependencyArr(updatedAllPaths.arr);
                 setAllPathsTreeObj({});
                 setAllPathsArrOfObj([]);
                 setAllPaths([]);
