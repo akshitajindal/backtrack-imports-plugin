@@ -28,6 +28,7 @@ function RenderForeignObjectNode(props) {
         return text;
     }
 
+    // eslint-disable-next-line
     const setTextElem = function () {
         let nodeElem = document.querySelector('.nodeRect');
         if (nodeElem) {
@@ -41,8 +42,7 @@ function RenderForeignObjectNode(props) {
 
     useEffect(() => {
         setTextElem();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [setTextElem])
 
     return (
         <react.Fragment>

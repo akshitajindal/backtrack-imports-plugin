@@ -32,10 +32,10 @@ g .rd3t-node:hover {
 .node__leaf text {
     fill: rgb(0, 0, 0);
     font-size: 18px;
-} 
+}
 
-.node__leaf rect{
-    fill:rgb(203, 203, 203);
+.node__leaf rect {
+    fill: rgb(203, 203, 203);
 }
 
 .tooltip {

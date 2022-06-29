@@ -6,14 +6,15 @@
     flex-direction: column;
 }
 
-.modulesList{
-    flex-grow: 1; 
+.modulesList {
+    flex-grow: 1;
     overflow-y: scroll;
 }
 
 .searchbox {
     margin-bottom: 0.6rem;
 }
+
 .searchbox input {
     width: 100%;
     padding: 0.4rem;
@@ -31,7 +32,7 @@
 }
 
 .modulesList li {
-    list-style:none;
+    list-style: none;
     display: block;
     padding: 0.2rem 0.4rem;
     margin: 0 0.2rem;
@@ -42,11 +43,12 @@
     overflow-wrap: break-word;
     color: white;
 }
-.modulesList li:hover{
+
+.modulesList li:hover {
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
     cursor: pointer;
-    overflow: visible; 
+    overflow: visible;
     white-space: normal;
-    height:auto; 
+    height: auto;
 }

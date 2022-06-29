@@ -1,7 +1,7 @@
 .chunksListContainer {
     width: 40vw;
     height: 100%;
-    float:left;
+    float: left;
     white-space: nowrap;
     display: flex;
     flex-direction: column;
@@ -13,7 +13,7 @@
     overflow: scroll;
 }
 
-.chunks-list-item{
+.chunks-list-item {
     list-style: none;
     padding: 0.2rem 0.4rem;
     color: white;

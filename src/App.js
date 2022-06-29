@@ -4,8 +4,8 @@ import ModulesList from './components/ModulesList';
 import GraphContainer from './components/GraphContainer';
 import react, { useState, useEffect } from 'react';
 import { Graph } from '../lib/backtrack-imports-code';
-// import WorkerBuilder from "./worker/worker-builder";
-// import TreeObjWorker from "./worker/treeObj.worker";
+import WorkerBuilder from "./worker/worker-builder";
+import TreeObjWorker from "./worker/treeObj.worker";
 const Fuse = require('fuse.js')
 
 const graph = new Graph();
@@ -22,7 +22,7 @@ const fuse = new Fuse(graph.allNodes, {
     keys: ['label']
 })
 
-//const workerInstance = new WorkerBuilder(TreeObjWorker);
+const workerInstance = new WorkerBuilder(TreeObjWorker);
 
 function App() {
 
@@ -37,6 +37,7 @@ function App() {
     const [circularDependencyArr, setCircularDependencyArr] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [allPathsArrOfObj, setAllPathsArrOfObj] = useState([]);
+    const [allPaths, setAllPaths] = useState([]);
 
     //let roots = graph.generateAllRootsNestedTreeObj();
 
@@ -55,46 +56,61 @@ function App() {
 
     const handleNodeOnClick = function (nodeData) {
         if (!nodeData.children) {
-            let updatedAllPathsArrOfObj = graph.generateAllPathsTreeObj(nodeData.name, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj);
-            if (updatedAllPathsArrOfObj.length > 0)
-                setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
+            workerInstance.postMessage([nodeData.name, allPaths, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj]);
+            // let updatedAllPathsArrOfObj = graph.generateAllPathsTreeObj(nodeData.name, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj);
+            // if (updatedAllPathsArrOfObj.length > 0)
+            //     setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
         }
     }
 
-    // workerInstance.onmessage = (message) => {
-    //   if (message) {
-    //     //console.log("Message from worker", message.data);
-    //     setAllPathsTreeObj(message.data);
-    //   }
-    //   setIsLoading(false);
-    //   workerInstance.terminate();
-    // };
-
-    useEffect(() => {
-        const setGraphObj = async () => {
-            let allPaths = graph.findAllPaths(active.module, active.chunks);
-            if (typeof (allPaths) === 'undefined') {
-                setCircularDependency(false);
-                setAllPathsTreeObj(null);
-                setAllPathsArrOfObj(null);
-                setCircularDependencyArr(null);
-            }
-            else if (allPaths.msg) {
-                setCircularDependency(true);
-                setCircularDependencyArr(allPaths.arr);
-                setAllPathsTreeObj({});
-                setAllPathsArrOfObj([]);
-            } else {
-                //setIsLoading(true);
-                setCircularDependency(false);
-                setCircularDependencyArr([]);
-                //workerInstance.postMessage([allPaths]);
-                let updatedAllPathsArrOfObj = graph.generateAllPathsTreeObj(active.module, null, 0, allPathsArrOfObj);
-                setAllPathsArrOfObj(updatedAllPathsArrOfObj);
+    workerInstance.onmessage = (message) => {
+        if (message) {
+            let updatedAllPathsArrOfObj = message.data[0];
+            setAllPathsArrOfObj(updatedAllPathsArrOfObj);
+            let depth = message.data[1];
+            if (depth === 0) {
                 if (updatedAllPathsArrOfObj.length > 0)
                     setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
                 else
                     setAllPathsTreeObj({});
+            } else {
+                if (updatedAllPathsArrOfObj.length > 0)
+                    setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
+            }
+            //setAllPathsTreeObj(message.data);
+        }
+        //setIsLoading(false);
+        //workerInstance.terminate();
+    };
+
+    useEffect(() => {
+        const setGraphObj = async () => {
+            let updatedAllPaths = graph.findAllPaths(active.module, active.chunks);
+            if (typeof (updatedAllPaths) === 'undefined') {
+                setCircularDependency(false);
+                setAllPathsTreeObj(null);
+                setAllPathsArrOfObj(null);
+                setCircularDependencyArr(null);
+                setAllPaths([]);
+            }
+            else if (updatedAllPaths.msg) {
+                setCircularDependency(true);
+                setCircularDependencyArr(allPaths.arr);
+                setAllPathsTreeObj({});
+                setAllPathsArrOfObj([]);
+                setAllPaths([]);
+            } else {
+                //setIsLoading(true);
+                setAllPaths(updatedAllPaths);
+                setCircularDependency(false);
+                setCircularDependencyArr([]);
+                workerInstance.postMessage([active.module, updatedAllPaths, null, 0, allPathsArrOfObj]);
+                // let updatedAllPathsArrOfObj = graph.generateAllPathsTreeObj(active.module, allPaths, null, 0, allPathsArrOfObj);
+                // setAllPathsArrOfObj(updatedAllPathsArrOfObj);
+                // if (updatedAllPathsArrOfObj.length > 0)
+                //     setAllPathsTreeObj({ ...updatedAllPathsArrOfObj[0] });
+                // else
+                //     setAllPathsTreeObj({});
             }
         }
         setGraphObj();
