@@ -23,17 +23,15 @@ class BacktrackImportsPlugin {
                 callback = callback || (() => { });
                 const relative_path = __dirname.replace(process.cwd(), '.');
                 const actions = [];
-                // actions.push(() => this.generateStatsFile(stats.toJson()));
-                // actions.push(() => this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile));
-                actions.push("Generate Stats File");
-                actions.push("Build and Render Plugin");
+                actions.push(() => this.generateStatsFile(stats.toJson()));
+                actions.push(() => this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile));
 
                 if (actions.length) {
                     setImmediate(async () => {
                         try {
-                            //await Promise.all(actions.map(action => action()));
-                            await this.generateStatsFile(stats.toJson());
-                            await this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile);
+                            for (const action of actions) {
+                                await action();
+                            }
                             callback();
                         } catch (e) {
                             callback(e);

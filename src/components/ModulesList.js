@@ -10,8 +10,6 @@ function ModulesList(props) {
         setFilteredNodes([...props.fuse.search(event.target.value)]);
     }
 
-    //const filteredNodes = props.fuse.search(query);
-
     const handleOnClick = function (event) {
         setQuery(event.target.innerHTML);
         props.handleModulesChange(event.target.innerHTML);
