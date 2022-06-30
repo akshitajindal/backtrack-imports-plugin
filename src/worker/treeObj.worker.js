@@ -8,7 +8,7 @@ export default () => {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         let now = Date.now();
-        return (now + result);
+        return (result + "-" + now);
     }
 
     // eslint-disable-next-line no-restricted-globals
