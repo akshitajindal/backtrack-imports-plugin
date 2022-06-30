@@ -42,10 +42,6 @@ module.exports = (nextConfig = {}) =>
     });
 ```
 
-### Backtrack-Imports-Plugin creates an interactive tree visualization of the imports path for the selected module.
-
-![GIF of Backtrack-Imports-Plugin](./public/93f72404-b338-11e6-92d4-9a365550a701.gif)
-
 ### This module will help you:
 
 1. Realize the imports structure between various files.
