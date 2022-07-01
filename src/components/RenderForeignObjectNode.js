@@ -1,69 +1,32 @@
 import react from 'react';
 
 function RenderForeignObjectNode(props) {
-    const clip = function (text, maxWidth, elem) {
-        elem.innerHTML = text;
-        let currWidth = elem.getBoundingClientRect().width;
-        if (currWidth > maxWidth) {
-            text = '...' + text.slice(2);
-            elem.innerHTML = text;
-            currWidth = elem.getBoundingClientRect().width;
-        }
-        while (currWidth >= maxWidth) {
-            text = '...' + text.slice(5);
-            elem.innerHTML = text;
-            currWidth = elem.getBoundingClientRect().width;
-        }
-        return text;
-    }
-
-    const setTextElem = function (nodeData) {
-        let nodeElem = document.getElementById(nodeData.id + "_rect");
-        let textElem = document.getElementById(nodeData.id + "_center");
-        let textElem_1 = document.getElementById(props.nodeData.id + "_1");
-        let textElem_2 = document.getElementById(props.nodeData.id + "_2");
-        if (nodeElem && textElem) {
-            let widthAvailable = 2 * (nodeElem.getBoundingClientRect().width - 20);
-            let clippedText = clip(nodeData.name, widthAvailable, textElem);
-            widthAvailable = widthAvailable / 2;
-            if (textElem.getBoundingClientRect().width > widthAvailable) {
-                textElem.innerHTML = "";
-                let len = clippedText.length;
-
-                let endIndex = len / 2;
-                let text = clippedText.slice(0, endIndex);
-                textElem_1.innerHTML = text;
-                let currWidth = textElem_1.getBoundingClientRect().width;
-
-                while (currWidth < widthAvailable && endIndex <= len) {
-                    endIndex += 1;
-                    text = clippedText.slice(0, endIndex);
-                    textElem_1.innerHTML = text;
-                    currWidth = textElem_1.getBoundingClientRect().width;
-                }
-                if (endIndex >= len) {
-                    textElem.innerHTML = clippedText;
-                    textElem_1.innerHTML = "";
-                }
-                else {
-                    textElem_2.innerHTML = clippedText.slice(endIndex);
-                }
-            }
-        }
-    }
-
+    const nodeWidth = 220;
+    const nodeHeight = 70;
+    const nodeShift = -110;
+    const strokeWidth = 0;
+    const textX = 0;
+    const text1Y = 25;
+    const textY = 35;
+    const text2Y = 48;
+    const oneLineTextlen = 20;
+    const twoLineTextLen = 40
     return (
         <react.Fragment>
             <g id={props.nodeData.id} className="node_element_tree" onClick={() => { props.handleNodeOnClick(props.nodeData); props.toggleNode(); }} onMouseOver={(event) => { props.handleNodeMouseOver(event, props.nodeData) }} onMouseOut={() => { props.handleNodeMouseOut() }} >
-                <rect id={props.nodeData.id + "_rect"} className='nodeRect' width="220" height="70" x="-110">
+                <rect className='nodeRect' width={nodeWidth} height={nodeHeight} x={nodeShift}>
                 </rect>
-                <text strokeWidth="0" x="0" y="25" alignmentBaseline="middle" textAnchor="middle" id={props.nodeData.id + "_1"}>
+                <text strokeWidth={strokeWidth} x={textX} y={text1Y} alignmentBaseline="middle" textAnchor="middle" id={props.nodeData.id + "_1"}>
+                    {(props.nodeData.name.length > twoLineTextLen) && "..." + props.nodeData.name.slice(-twoLineTextLen, -oneLineTextlen)}
+                    {(props.nodeData.name.length <= twoLineTextLen) && (props.nodeData.name.length > oneLineTextlen) && props.nodeData.name.slice(0, oneLineTextlen)}
                 </text>
-                <text strokeWidth="0" x="0" y="35" alignmentBaseline="middle" textAnchor="middle" id={props.nodeData.id + "_center"}>
+                <text strokeWidth={strokeWidth} x={textX} y={textY} alignmentBaseline="middle" textAnchor="middle" id={props.nodeData.id + "_center"}>
+                    {(props.nodeData.name.length <= oneLineTextlen) && props.nodeData.name}
                 </text>
-                <text strokeWidth="0" x="0" y="48" alignmentBaseline="middle" textAnchor="middle" id={props.nodeData.id + "_2"}>
+                <text strokeWidth={strokeWidth} x={textX} y={text2Y} alignmentBaseline="middle" textAnchor="middle" id={props.nodeData.id + "_2"}>
+                    {(props.nodeData.name.length > twoLineTextLen) && props.nodeData.name.slice(-oneLineTextlen)}
+                    {(props.nodeData.name.length <= twoLineTextLen) && (props.nodeData.name.length > oneLineTextlen) && props.nodeData.name.slice(oneLineTextlen)}
                 </text>
-                {setTextElem(props.nodeData)}
             </g>
         </react.Fragment>
     )
