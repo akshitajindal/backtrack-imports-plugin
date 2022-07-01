@@ -49,8 +49,15 @@ function App() {
     }
 
     const handleNodeOnClick = function (nodeData) {
-        if (!nodeData.children) {
-            workerInstance.postMessage([nodeData.name, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj, allPaths]);
+        let pathToNode = []
+        let currNode = nodeData;
+        while (currNode.parentIndex !== null) {
+            pathToNode.push(currNode.parentIndex);
+            currNode = currNode.parentRef;
+        }
+        pathToNode.reverse();
+        if (nodeData.parentId) {
+            workerInstance.postMessage([nodeData.name, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj, allPaths, pathToNode]);
         }
     }
 
@@ -78,7 +85,7 @@ function App() {
                 setIsLoading(true);
                 setAllPaths(updatedAllPaths);
                 setCircularDependencyArr([]);
-                workerInstance.postMessage([active.module, null, 0, allPathsArrOfObj, updatedAllPaths]);
+                workerInstance.postMessage([active.module, null, 0, allPathsArrOfObj, updatedAllPaths, null]);
             }
         }
         setGraphObj();
