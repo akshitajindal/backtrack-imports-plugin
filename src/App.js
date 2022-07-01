@@ -56,9 +56,7 @@ function App() {
             currNode = currNode.parentRef;
         }
         pathToNode.reverse();
-        if (nodeData.parentId) {
-            workerInstance.postMessage([nodeData.name, nodeData.id, nodeData.__rd3t.depth, allPathsArrOfObj, allPaths, pathToNode]);
-        }
+        workerInstance.postMessage([nodeData.name, nodeData.__rd3t.depth, allPathsArrOfObj, allPaths, pathToNode]);
     }
 
     workerInstance.onmessage = (message) => {
@@ -85,11 +83,10 @@ function App() {
                 setIsLoading(true);
                 setAllPaths(updatedAllPaths);
                 setCircularDependencyArr([]);
-                workerInstance.postMessage([active.module, null, 0, allPathsArrOfObj, updatedAllPaths, null]);
+                workerInstance.postMessage([active.module, 0, [], updatedAllPaths, []]);
             }
         }
         setGraphObj();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active])
 
 
