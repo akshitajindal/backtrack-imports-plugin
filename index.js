@@ -19,6 +19,7 @@ class BacktrackImportsPlugin {
     apply(compiler) {
         this.compiler = compiler;
         if (compiler.options.name === 'client') {
+            //tap into done hook of the compiler object. Use the stats argument to generate a JSON file. Build the plugin, and open the HTML file built in a browser.
             compiler.hooks.done.tapAsync(pluginName, (stats, callback) => {
                 callback = callback || (() => { });
                 const relative_path = __dirname.replace(process.cwd(), '.');
@@ -44,6 +45,7 @@ class BacktrackImportsPlugin {
         }
     }
 
+    //function to render the HTML file built on running yarn build on the plugin.
     async buildAndRenderPlugin(relative_path, openHTMLFile) {
         let startTime = performance.now();
         exec(`cd ${relative_path} && yarn build`, (err, stdout, stderr) => {
@@ -60,6 +62,7 @@ class BacktrackImportsPlugin {
         });
     }
 
+    //function to write and save the JSON file at a particular path.
     async generateStatsFile(stats) {
         const statsFileFolder = __dirname + '/lib';
         const statsFilename = 'stats-backtrack-imports.json'

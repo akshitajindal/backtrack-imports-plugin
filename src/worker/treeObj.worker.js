@@ -12,18 +12,24 @@ export default () => {
         postMessage([updatedAllPathsArrOfObj]);
     };
 
+    //function to form the nested tree object on clicking a node one level at a time. Also disconnect a opened node from it's subtree on cicking the node.
     const updateNestedTreeObj = function (filePath, allPaths, depth, allPathsArrOfObj, pathToNode) {
         if (!allPaths || allPaths.length === 0 || allPaths[0].length === 0) {
             return [];
         }
+
+        //for root node 
         if (depth === 0) {
             if (allPathsArrOfObj.length === 0) {
                 let rootId = makeid();
                 allPathsArrOfObj.push({ id: rootId, parentIndex: null, parentRef: null, name: allPaths[0][0].name, size: allPaths[0][0].size });
             }
         }
+
         let node = allPathsArrOfObj;
         let currNodeindex = 0;
+
+        //parsing through the nested tree object to the clicked node's parent
         if (depth !== 0) {
             for (let i = 0; i < pathToNode.length; i++) {
                 let index = pathToNode[i];
@@ -33,6 +39,8 @@ export default () => {
             }
             currNodeindex = node.findIndex(element => element.name === filePath)
         }
+
+        //appending a node's children or connecting/disconnecting a node to it's previously formed subtree
         if (!node[currNodeindex].children) {
             node[currNodeindex].children = [];
             let setOfObj = new Set();
@@ -57,6 +65,7 @@ export default () => {
         } else {
             node[currNodeindex].children = [];
         }
+
         return allPathsArrOfObj;
     }
 

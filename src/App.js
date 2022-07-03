@@ -8,6 +8,7 @@ import WorkerBuilder from "./worker/worker-builder";
 import TreeObjWorker from "./worker/treeObj.worker";
 import Fuse from 'fuse.js';
 
+//initializing graph object
 const graph = new Graph();
 graph.setGraphObj();
 
@@ -18,10 +19,12 @@ graph.allChunks.forEach((value, key) => {
     })
 })
 
+//initializing fuzzy search object
 const fuse = new Fuse(graph.allNodes, {
     keys: ['label']
 })
 
+//initialize web worker instance
 const workerInstance = new WorkerBuilder(TreeObjWorker);
 
 function App() {
@@ -48,6 +51,7 @@ function App() {
         }));
     }
 
+    //On clicking a tree node, function generates a path from root to that node and pass it to the web worker
     const handleNodeOnClick = function (nodeData) {
         let pathToNode = []
         let currNode = nodeData;
