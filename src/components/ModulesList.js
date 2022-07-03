@@ -15,10 +15,15 @@ function ModulesList(props) {
         props.handleModulesChange(event.target.innerHTML);
     }
 
+    const selectInput = function () {
+        const input = document.getElementById('module-input');
+        input.select();
+    }
+
     return (
         <div className='modulesListContainer'>
             <div className='searchbox'>
-                <input type='text' value={query} onChange={changeHandler} placeholder='Enter Module name' />
+                <input id='module-input' type='text' value={query} onClick={selectInput} onChange={changeHandler} placeholder='Enter Module name' />
             </div>
             <div className='modulesList'>
                 <ul>
