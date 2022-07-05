@@ -43,7 +43,7 @@ function TreeComponent(props) {
                 branchNodeClassName="node__branch"
                 leafNodeClassName="node__leaf"
                 pathFunc="step"
-                collapsible={true}
+                collapsible={false}
                 nodeSize={{
                     x: 240,
                     y: 200
