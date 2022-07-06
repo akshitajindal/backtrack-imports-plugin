@@ -21,16 +21,27 @@ class BacktrackImportsPlugin {
         if (compiler.options.name === 'client') {
             //tap into done hook of the compiler object. Use the stats argument to generate a JSON file. 
             //build the plugin, and open the HTML file built in a browser.
-            compiler.hooks.done.tapAsync(pluginName, (stats) => {
+            compiler.hooks.done.tapAsync(pluginName, (stats, callback) => {
+                callback = callback || (() => { });
                 const relative_path = __dirname.replace(process.cwd(), '.');
-                setImmediate(async () => {
-                    try {
-                        await this.generateStatsFile(stats.toJson());
-                        await this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                });
+                const actions = [];
+                actions.push(() => this.generateStatsFile(stats.toJson()));
+                actions.push(() => this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile));
+
+                if (actions.length) {
+                    setImmediate(async () => {
+                        try {
+                            for (const action of actions) {
+                                await action();
+                            }
+                            callback();
+                        } catch (e) {
+                            callback(e);
+                        }
+                    });
+                } else {
+                    callback();
+                }
             })
         }
     }
