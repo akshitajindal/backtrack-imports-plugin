@@ -24,24 +24,15 @@ class BacktrackImportsPlugin {
             compiler.hooks.done.tapAsync(pluginName, (stats, callback) => {
                 callback = callback || (() => { });
                 const relative_path = __dirname.replace(process.cwd(), '.');
-                const actions = [];
-                actions.push(() => this.generateStatsFile(stats.toJson()));
-                actions.push(() => this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile));
-
-                if (actions.length) {
-                    setImmediate(async () => {
-                        try {
-                            for (const action of actions) {
-                                await action();
-                            }
-                            callback();
-                        } catch (e) {
-                            callback(e);
-                        }
-                    });
-                } else {
-                    callback();
-                }
+                setImmediate(async () => {
+                    try {
+                        await this.generateStatsFile(stats.toJson())
+                        await this.buildAndRenderPlugin(relative_path, this.opts.openHTMLFile);
+                        callback();
+                    } catch (e) {
+                        callback(e);
+                    }
+                });
             })
         }
     }
